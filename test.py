@@ -15,12 +15,13 @@ class RegisterForm(FlaskForm):
 
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
-    # return render_template('register.html', title="Регистрация", form=form)
+    return render_template('register.html', title="Регистрация", form=form)
 
 
 if __name__ == '__main__':
