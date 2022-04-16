@@ -34,12 +34,14 @@ def reqister():
         if form.password.data != form.password_again.data:
             return render_template('register.html', title='Регистрация',
                                    form=form,
-                                   message="Пароли не совпадают")
+                                   message="Пароли не совпадают",
+                                   current_user=current_user)
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
-                                   message="Такой пользователь уже есть")
+                                   message="Такой пользователь уже есть",
+                                   current_user=current_user)
         user = User(
             name=form.name.data,
             email=form.email.data,
