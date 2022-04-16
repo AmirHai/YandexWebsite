@@ -18,9 +18,9 @@ class RegisterForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     email = EmailField('Login/email', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Remember me')
-    submit = SubmitField('Login')
+    password = PasswordField('Пароль', validators=[DataRequired()])
+    remember_me = BooleanField('Запомнить меня')
+    submit = SubmitField('Авторизоваться')
 
 
 app = Flask(__name__)
