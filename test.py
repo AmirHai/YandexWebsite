@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from flask_wtf import FlaskForm
-from wtforms import EmailField, PasswordField, StringField, SubmitField, TextAreaField
+from wtforms import EmailField, PasswordField, StringField, SubmitField, TextAreaField, BooleanField
 from wtforms.validators import DataRequired
 from flask_login import current_user
 
@@ -16,6 +16,13 @@ class RegisterForm(FlaskForm):
     submit = SubmitField('Войти')
 
 
+class LoginForm(FlaskForm):
+    email = EmailField('Login/email', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember_me = BooleanField('Remember me')
+    submit = SubmitField('Login')
+
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
@@ -24,6 +31,16 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 def register():
     form = RegisterForm()
     return render_template('register.html', title="Регистрация", form=form,
+                           current_user=current_user)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        # код, если пользователь нажал на кнопку Авторизироваться
+        pass
+    return render_template('login.html', title="Авторизация", form=form,
                            current_user=current_user)
 
 
