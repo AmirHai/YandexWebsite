@@ -2,7 +2,9 @@
 
 {% block content %}
     <h1>Авторизация</h1>
-    <div class="alert alert-danger" role="alert">{{ message }}</div>
+    {% if message %}
+        <div class="alert alert-danger" role="alert">{{ message }}</div>
+    {% endif %}
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
