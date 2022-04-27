@@ -82,6 +82,8 @@ def index():
     question = []
     if current_user.is_authenticated:
         question = db_sess.query(Questions).filter(Questions.user == current_user)
+    else:
+        redirect('/login')
     return render_template('index.html', question=question, current_user=current_user)
 
 
