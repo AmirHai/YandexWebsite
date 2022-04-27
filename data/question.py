@@ -4,7 +4,7 @@ from sqlalchemy import orm
 from .db_session import SqlAlchemyBase
 
 
-class Questions(SqlAlchemyBase):
+class Question(SqlAlchemyBase):
     __tablename__ = 'questions'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,

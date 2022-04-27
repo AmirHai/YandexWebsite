@@ -4,7 +4,7 @@ from wtforms import EmailField, PasswordField, StringField, SubmitField, TextAre
 from wtforms.validators import DataRequired
 from flask_login import current_user, login_user, LoginManager, logout_user, login_required
 from data.user import User
-from data.questions import Questions
+from data.question import Question
 from data import db_session
 
 
@@ -49,6 +49,23 @@ def logout():
     return redirect("/")
 
 
+@app.route('/question',  methods=['GET', 'POST'])
+@login_required
+def add_news():
+    form = QuestionForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        question = Question()
+        question.title = form.title.data
+        question.content = form.content.data
+        current_user.questions.append(question)
+        db_sess.merge(current_user)
+        db_sess.commit()
+        return redirect('/')
+    return render_template('question.html', title='Добавление вопроса',
+                           form=form)
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
     form = RegisterForm()
@@ -81,7 +98,7 @@ def index():
     db_sess = db_session.create_session()
     question = []
     if current_user.is_authenticated:
-        question = db_sess.query(Questions).filter(Questions.user == current_user)
+        question = db_sess.query(Question).filter(Question.user == current_user)
     else:
         redirect('/login')
     return render_template('index.html', question=question, current_user=current_user)
