@@ -1,5 +1,6 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request
 from flask_wtf import FlaskForm
+from werkzeug.exceptions import abort
 from wtforms import EmailField, PasswordField, StringField, SubmitField, TextAreaField, BooleanField
 from wtforms.validators import DataRequired
 from flask_login import current_user, login_user, LoginManager, logout_user, login_required
@@ -47,6 +48,33 @@ def load_user(user_id):
 def logout():
     logout_user()
     return redirect("/")
+
+
+@app.route('/question/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_question(id):
+    form = QuestionForm()
+    if request.method == 'GET':
+        db_sess = db_session.create_session()
+        question = db_sess.query(Question).filter(Question.id == id,
+                                                  Question.user == current_user).first()
+        if question:
+            form.title.data = question.title
+            form.content.data = question.content
+        else:
+            abort(404)
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        question = db_sess.query(Question).filter(Question.id == id,
+                                                  Question.user == current_user).first()
+        if question:
+            question.title = form.title.data
+            question.content = form.content.data
+            db_sess.commit()
+            return redirect('/')
+        else:
+            abort(404)
+    return render_template('question.html', form=form, title='Редактирование вопроса')
 
 
 @app.route('/question',  methods=['GET', 'POST'])
