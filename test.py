@@ -1,35 +1,12 @@
 from flask import Flask, render_template, redirect, request
-from flask_wtf import FlaskForm
 from werkzeug.exceptions import abort
-from wtforms import EmailField, PasswordField, StringField, SubmitField, TextAreaField, BooleanField
-from wtforms.validators import DataRequired
 from flask_login import current_user, login_user, LoginManager, logout_user, login_required
 from data.user import User
 from data.question import Question
 from data import db_session
-
-
-class QuestionForm(FlaskForm):
-    title = StringField('Вопрос (кратко)')
-    content = TextAreaField('Вопрос (подробно)')
-    submit = SubmitField('Применить')
-
-
-class RegisterForm(FlaskForm):
-    email = EmailField('Почта', validators=[DataRequired()])
-    password = PasswordField('Пароль', validators=[DataRequired()])
-    password_again = PasswordField('Повторите пароль', validators=[DataRequired()])
-    name = StringField('Имя пользователя', validators=[DataRequired()])
-    about = TextAreaField("Немного о себе")
-    submit = SubmitField('Войти')
-
-
-class LoginForm(FlaskForm):
-    email = EmailField('Login/email', validators=[DataRequired()])
-    password = PasswordField('Пароль', validators=[DataRequired()])
-    remember_me = BooleanField('Запомнить меня')
-    submit = SubmitField('Авторизоваться')
-
+from forms.login import LoginForm
+from forms.question import QuestionForm
+from forms.register import RegisterForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
