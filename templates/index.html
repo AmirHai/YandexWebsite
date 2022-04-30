@@ -22,9 +22,30 @@
             <a href="/question_delete/{{ item.id }}" class="btn btn-danger">
                 Удалить
             </a>
-            <a href="/new_answer/{{ item.id }}" class="btn btn-success">Ответить</a>
+            <a href="/new_answer/{{ item.id }}" class="btn btn-success">
+                Ответить
+            </a>
         </div>
     {% endif %}
+    {% set loop_index = loop.index0 %}
+    {% for answer in answers[loop_index] %}
+    <div style="padding-left:50px">
+        <h2>{{answer.content}}</h2>
+        <div>
+            Автор - {{answer.user.name}}, Дата написания - {{answer.created_date}}
+        </div>
+        {% if current_user.is_authenticated and current_user == answer.user %}
+            <div>
+                <a href="/answer/{{ answer.id }}" class="btn btn-warning">
+                    Редактировать
+                </a>
+                <a href="/answer_delete/{{ answer.id }}" class="btn btn-danger">
+                    Удалить
+                </a>
+            </div>
+        {% endif %}
+    </div>
+    {% endfor %}
 </div>
 {% endfor %}
 {% endblock %}
