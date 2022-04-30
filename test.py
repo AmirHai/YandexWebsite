@@ -1,9 +1,12 @@
 from flask import Flask, render_template, redirect, request
 from werkzeug.exceptions import abort
 from flask_login import current_user, login_user, LoginManager, logout_user, login_required
+
+from data.answer import Answer
 from data.user import User
 from data.question import Question
 from data import db_session
+from forms.answer import AnswerForm
 from forms.login import LoginForm
 from forms.question import QuestionForm
 from forms.register import RegisterForm
@@ -25,6 +28,23 @@ def load_user(user_id):
 def logout():
     logout_user()
     return redirect("/")
+
+
+@app.route('/new_answer/<int:question_id>', methods=['GET', 'POST'])
+@login_required
+def new_answer(question_id):
+    form = AnswerForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        answer = Answer()
+        answer.content = form.content.data
+        answer.question_id = question_id
+        current_user.answers.append(answer)
+        db_sess.merge(current_user)
+        db_sess.commit()
+        return redirect('/')
+    return render_template('answer.html', title='Добавление ответа',
+                           form=form)
 
 
 @app.route('/question/<int:id>', methods=['GET', 'POST'])
@@ -69,7 +89,7 @@ def delete_question(id):
 
 @app.route('/question',  methods=['GET', 'POST'])
 @login_required
-def add_news():
+def add_question():
     form = QuestionForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
