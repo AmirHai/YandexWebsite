@@ -77,6 +77,19 @@ def edit_question(id):
     return render_template('question.html', form=form, title='Редактирование вопроса')
 
 
+@app.route('/question_delete/<int:id>', methods=['GET', 'POST'])
+def delete_question(id):
+    db_sess = db_session.create_session()
+    question = db_sess.query(Question).filter(Question.id == id,
+                                              Question.user == current_user).first()
+    if question:
+        db_sess.delete(question)
+        db_sess.commit()
+    else:
+        abort(404)
+    return redirect('/')
+
+
 @app.route('/question',  methods=['GET', 'POST'])
 @login_required
 def add_news():
