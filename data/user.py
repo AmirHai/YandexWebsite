@@ -16,8 +16,8 @@ class User(SqlAlchemyBase, UserMixin):
     email = sqlalchemy.Column(sqlalchemy.String,
                               index=True, unique=True, nullable=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    created_date = sqlalchemy.Column(sqlalchemy.DateTime,
-                                     default=datetime.datetime.now)
+    created_date = sqlalchemy.Column(sqlalchemy.String,
+                                     default=datetime.datetime.now().strftime('%d.%m.%Y'))
     questions = orm.relation("Question", back_populates='user')
 
     def set_password(self, password):
