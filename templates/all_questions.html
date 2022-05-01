@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<a href="all_questions">Все вопросы</a>
-<h1>Ваши вопросы</h1>
+<h1>Все вопросы</h1>
 {% if current_user.is_authenticated %}
     <a href="question" class="btn btn-secondary">Задать вопрос</a>
 {% endif %}
@@ -15,14 +14,8 @@
     <div>
         Автор - {{item.user.name}}, Дата написания - {{item.created_date}}
     </div>
-    {% if current_user.is_authenticated and current_user == item.user %}
+    {% if current_user.is_authenticated %}
         <div>
-            <a href="/question/{{ item.id }}" class="btn btn-warning">
-                Редактировать
-            </a>
-            <a href="/question_delete/{{ item.id }}" class="btn btn-danger">
-                Удалить
-            </a>
             <a href="/new_answer/{{ item.id }}" class="btn btn-success">
                 Ответить
             </a>

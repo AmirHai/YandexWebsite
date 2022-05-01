@@ -30,6 +30,19 @@ def logout():
     return redirect("/")
 
 
+@app.route('/all_questions')
+def all_questions():
+    db_sess = db_session.create_session()
+    questions = db_sess.query(Question)
+    answers = []
+    for question in questions:
+        answer = db_sess.query(Answer).filter(Answer.question_id == question.id)
+        answers.append(answer)
+    return render_template('all_questions.html', question=questions,
+                           current_user=current_user, answers=answers,
+                           title='Все вопросы')
+
+
 @app.route('/new_answer/<int:question_id>', methods=['GET', 'POST'])
 @login_required
 def new_answer(question_id):
@@ -158,11 +171,10 @@ def reqister():
                                    form=form,
                                    message="Такой пользователь уже есть",
                                    current_user=current_user)
-        user = User(
-            name=form.name.data,
-            email=form.email.data,
-            about=form.about.data
-        )
+        user = User()
+        user.name = form.name.data
+        user.email = form.email.data
+        user.about = form.about.data
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
@@ -183,7 +195,8 @@ def index():
     else:
         redirect('/login')
     return render_template('index.html', question=questions,
-                           current_user=current_user, answers=answers)
+                           current_user=current_user, answers=answers,
+                           title='Ваши вопросы')
 
 
 @app.route('/login', methods=['GET', 'POST'])
