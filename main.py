@@ -1,4 +1,5 @@
 from flask import Flask, render_template, redirect, request
+from flask_restful import Api
 from werkzeug.exceptions import abort
 from flask_login import current_user, login_user, LoginManager, logout_user, login_required
 
@@ -10,11 +11,20 @@ from forms.answer import AnswerForm
 from forms.login import LoginForm
 from forms.question import QuestionForm
 from forms.register import RegisterForm
+from data import user_resources, question_resources, answer_resources
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandex_lyceum_secret_key'
+api = Api(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+api.add_resource(question_resources.QuestionListResource, '/api/questions')
+api.add_resource(question_resources.QuestionResource, '/api/questions/<int:question_id>')
+api.add_resource(answer_resources.AnswerListResource, '/api/answers')
+api.add_resource(answer_resources.AnswerResource, '/api/answers/<int:answer_id>')
+api.add_resource(user_resources.UserListResource, '/api/users')
+api.add_resource(user_resources.UserResource, '/api/users/<int:user_id>')
 
 
 @login_manager.user_loader
