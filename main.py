@@ -12,7 +12,7 @@ from forms.question import QuestionForm
 from forms.register import RegisterForm
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+app.config['SECRET_KEY'] = 'yandex_lyceum_secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -157,7 +157,7 @@ def add_question():
 
 
 @app.route('/register', methods=['GET', 'POST'])
-def reqister():
+def register():
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:

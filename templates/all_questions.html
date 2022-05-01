@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+<a href="/">Ваши вопросы</a>
 <h1>Все вопросы</h1>
 {% if current_user.is_authenticated %}
     <a href="question" class="btn btn-secondary">Задать вопрос</a>
